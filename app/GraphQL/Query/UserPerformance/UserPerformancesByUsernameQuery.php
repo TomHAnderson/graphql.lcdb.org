@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Query\UserPerformance;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -11,11 +13,16 @@ use League\Event\EventDispatcher;
 
 class UserPerformancesByUsernameQuery implements GraphQLQuery
 {
-    public static function getDefinition(Driver $driver, array $variables = [], ?string $operationName = null): array
+    /**
+     * @param array<string, mixed> $variables
+     *
+     * @return array<string, mixed>
+     */
+    public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array
     {
-        $driver->get(EventDispatcher::class)->subscribeTo('userPerformancesByUsername',
-            function (FilterQueryBuilder $event) use ($variables) {
-
+        $driver->get(EventDispatcher::class)->subscribeTo(
+            'userPerformancesByUsername',
+            static function (FilterQueryBuilder $event): void {
                 $queryBuilder = $event->getQueryBuilder();
                 $queryBuilder
                     ->innerJoin('entity.performance', 'performance')
@@ -26,21 +33,18 @@ class UserPerformancesByUsernameQuery implements GraphQLQuery
                     ->addOrderBy('artist.name', 'asc')
                     ->addOrderBy('performance.year', 'asc')
                     ->addOrderBy('performance.date', 'asc')
-                    ->addOrderBy('entity.id', 'asc')
-                    ;
+                    ->addOrderBy('entity.id', 'asc');
 
                 if (isset($event->getArgs()['listname']) && $event->getArgs()['listname']) {
                     $queryBuilder
                         ->innerJoin('entity.userLists', 'userLists')
                         ->andWhere($queryBuilder->expr()->eq('userLists.shortname', ':listname'))
-                        ->setParameter('listname', $event->getArgs()['listname'])
-                        ;
+                        ->setParameter('listname', $event->getArgs()['listname']);
                 }
 
-#                print_r($queryBuilder->getQuery()->getSQL());die();
-            }
+            // print_r($queryBuilder->getQuery()->getSQL());die();
+            },
         );
-
 
         return [
             'type' => $driver->connection($driver->type(UserPerformance::class)),
@@ -50,7 +54,7 @@ class UserPerformancesByUsernameQuery implements GraphQLQuery
                 'pagination' => $driver->pagination(),
             ],
             'resolve' => $driver->resolve(UserPerformance::class, 'userPerformancesByUsername'),
-            'description' => <<<EOF
+            'description' => <<<'EOF'
 Fetch a user's list or sublist of performances by username.
 EOF,
         ];

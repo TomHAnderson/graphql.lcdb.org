@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Query\ArtistGroup;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -10,31 +12,37 @@ use League\Event\EventDispatcher;
 
 class ArtistGroupsQuery implements GraphQLQuery
 {
-    public static function getDefinition(Driver $driver, array $variables = [], ?string $operationName = null): array
+    /**
+     * @param array<string, mixed> $variables
+     *
+     * @return array<string, mixed>
+     */
+    public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array
     {
         if ($operationName === 'ArtistGroupsOther') {
-            $driver->get(EventDispatcher::class)->subscribeTo('artistGroups',
-                function (FilterQueryBuilder $event) use ($variables) {
+            $driver->get(EventDispatcher::class)->subscribeTo(
+                'artistGroups',
+                static function (FilterQueryBuilder $event): void {
                     $queryBuilder = $event->getQueryBuilder();
                     $queryBuilder
                         ->andWhere(
                             $queryBuilder->expr()->orX(
                                 $queryBuilder->expr()->lt('ASCII(entity.title)', ':min'),
-                                $queryBuilder->expr()->gt('ASCII(entity.title)', ':max')
-
-                            )
+                                $queryBuilder->expr()->gt('ASCII(entity.title)', ':max'),
+                            ),
                         )
                         ->setParameter('min', 65)
                         ->setParameter('max', 122);
 
-#                    print_r($queryBuilder->getQuery()->getSQL());die();
-                }
+                // print_r($queryBuilder->getQuery()->getSQL());die();
+                },
             );
         }
 
         if ($operationName === 'SourceArtistGroups') {
-            $driver->get(EventDispatcher::class)->subscribeTo('artistGroups',
-                function (FilterQueryBuilder $event) use ($variables) {
+            $driver->get(EventDispatcher::class)->subscribeTo(
+                'artistGroups',
+                static function (FilterQueryBuilder $event): void {
                     $queryBuilder = $event->getQueryBuilder();
                     $queryBuilder
                         ->distinct()
@@ -43,14 +51,15 @@ class ArtistGroupsQuery implements GraphQLQuery
                         ->innerJoin('artist.performances', 'performances')
                         ->innerJoin('performances.sources', 'sources');
 
-#                    print_r($queryBuilder->getQuery()->getSQL());die();
-                }
+                // print_r($queryBuilder->getQuery()->getSQL());die();
+                },
             );
         }
 
         if ($operationName === 'SourceArtistGroupsOther') {
-            $driver->get(EventDispatcher::class)->subscribeTo('artistGroups',
-                function (FilterQueryBuilder $event) use ($variables) {
+            $driver->get(EventDispatcher::class)->subscribeTo(
+                'artistGroups',
+                static function (FilterQueryBuilder $event): void {
                     $queryBuilder = $event->getQueryBuilder();
                     $queryBuilder
                         ->distinct()
@@ -61,15 +70,14 @@ class ArtistGroupsQuery implements GraphQLQuery
                         ->andWhere(
                             $queryBuilder->expr()->orX(
                                 $queryBuilder->expr()->lt('ASCII(entity.title)', ':min'),
-                                $queryBuilder->expr()->gt('ASCII(entity.title)', ':max')
-
-                            )
+                                $queryBuilder->expr()->gt('ASCII(entity.title)', ':max'),
+                            ),
                         )
                         ->setParameter('min', 65)
                         ->setParameter('max', 122);
 
-#                    print_r($queryBuilder->getQuery()->getSQL());die();
-                }
+                // print_r($queryBuilder->getQuery()->getSQL());die();
+                },
             );
         }
 
@@ -80,7 +88,7 @@ class ArtistGroupsQuery implements GraphQLQuery
                 'pagination' => $driver->pagination(),
             ],
             'resolve' => $driver->resolve(ArtistGroup::class, 'artistGroups'),
-            'description' => <<<EOF
+            'description' => <<<'EOF'
 Fetch a collection of artist groups.
 
 Special Operations

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Event;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -22,27 +24,26 @@ final class UserListDefinition implements Event
             UserList::class . '.definition',
             static function (EntityDefinition $event) use ($driver): void {
                 $definition = $event->getDefinition();
-                $fields = $definition['fields']();
+                $fields     = $definition['fields']();
 
                 $fields['userPerformanceCount'] = [
                     'type' => Type::int(),
                     'description' => 'The count of user performances assigned to a user list',
-                    'resolve' => static function ($objectValue, array $args, $context, ResolveInfo $info) use ($driver) : mixed {
+                    'resolve' => static function ($objectValue, array $args, $context, ResolveInfo $info) use ($driver): mixed {
                         $queryBuilder = $driver->get(EntityManager::class)->createQueryBuilder();
 
                         $queryBuilder->select('COUNT(userPerformance)')
                             ->from(UserPerformance::class, 'userPerformance')
                             ->innerJoin('userPerformance.userLists', 'userLists')
                             ->andWhere($queryBuilder->expr()->eq('userLists.id', ':id'))
-                            ->setParameter('id', $objectValue->getId())
-                        ;
+                            ->setParameter('id', $objectValue->getId());
 
                         return $queryBuilder->getQuery()->getSingleScalarResult();
                     },
                 ];
 
                 $definition['fields'] = $fields;
-            }
+            },
         );
     }
 }

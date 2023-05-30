@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Query\UserList;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -11,7 +13,12 @@ use GraphQL\Type\Definition\Type;
 
 class UserListQuery implements GraphQLQuery
 {
-    public static function getDefinition(Driver $driver, array $variables = [], ?string $operationName = null): array
+    /**
+     * @param array<string, mixed> $variables
+     *
+     * @return array<string, mixed>
+     */
+    public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array
     {
         return [
             'type' => $driver->type(UserList::class),
@@ -19,15 +26,15 @@ class UserListQuery implements GraphQLQuery
                 'id' => Type::nonNull(Type::int()),
                 'shortname' => Type::nonNull(Type::string()),
             ],
-            'resolve' => function ($obj, $args, $context, ResolveInfo $info) use ($driver) {
+            'resolve' => static function ($obj, $args, $context, ResolveInfo $info) use ($driver) {
                 return $driver->get(EntityManager::class)
                     ->getRepository(UserList::class)
                     ->findOneBy([
                         'user' => $args['id'],
-                        'shortname' => $args['shortname']
+                        'shortname' => $args['shortname'],
                     ]);
             },
-            'description' => <<<EOF
+            'description' => <<<'EOF'
 Fetch a single user list.
 EOF,
         ];

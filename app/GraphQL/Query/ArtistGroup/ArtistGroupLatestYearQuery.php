@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Query\ArtistGroup;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -11,14 +13,19 @@ use GraphQL\Type\Definition\Type;
 
 class ArtistGroupLatestYearQuery implements GraphQLQuery
 {
-    public static function getDefinition(Driver $driver, array $variables = [], ?string $operationName = null): array
+    /**
+     * @param array<string, mixed> $variables
+     *
+     * @return array<string, mixed>
+     */
+    public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array
     {
         return [
             'type' => Type::int(),
             'args' => [
                 'id' => Type::nonNull(Type::int()),
             ],
-            'resolve' => function ($obj, $args, $context, ResolveInfo $info) use ($driver) {
+            'resolve' => static function ($obj, $args, $context, ResolveInfo $info) use ($driver) {
                 $queryBuilder = $driver->get(EntityManager::class)->createQueryBuilder();
                 $queryBuilder->select('MAX(performance.year)')
                     ->from(Performance::class, 'performance')
@@ -31,7 +38,7 @@ class ArtistGroupLatestYearQuery implements GraphQLQuery
 
                 return $queryBuilder->getQuery()->getSingleScalarResult();
             },
-            'description' => <<<EOF
+            'description' => <<<'EOF'
 Fetch the most recent performance year for an artist group.
 EOF,
         ];

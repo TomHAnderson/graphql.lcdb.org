@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\InternetArchive;
 
 use App\ORM\Entity\Artist;
@@ -8,6 +10,8 @@ use App\ORM\Entity\InternetArchive\Creator;
 use App\ORM\Entity\InternetArchive\File;
 use App\ORM\Entity\InternetArchive\Identifier;
 use App\ORM\Entity\Source;
+use DateTime;
+use DirectoryIterator;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,14 +19,41 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Throwable;
+
+use function array_unique;
+use function curl_close;
+use function curl_exec;
+use function curl_getinfo;
+use function curl_init;
+use function curl_setopt;
+use function file_get_contents;
+use function implode;
+use function print_r;
+use function rmdir;
+use function shell_exec;
+use function str_replace;
+use function substr;
+use function sys_get_temp_dir;
+use function uniqid;
+
+use const CURLINFO_EFFECTIVE_URL;
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_HEADER;
+use const CURLOPT_RETURNTRANSFER;
+use const CURLOPT_URL;
 
 class IndexDate implements
     ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    private \DateTime $dateTime;
+    private DateTime $dateTime;
 
+    /** @var string[] */
     private array $fields = [
         'creator',
         'identifier',
@@ -50,25 +81,23 @@ class IndexDate implements
      */
     public function __construct(string $date)
     {
-        $this->dateTime = \DateTime::CreateFromFormat('Y-m-d', $date);
+        $this->dateTime = DateTime::CreateFromFormat('Y-m-d', $date);
     }
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
-    public function handle(EntityManager $entityManager)
+    public function handle(EntityManager $entityManager): void
     {
         $identifierRepository = $entityManager
             ->getRepository(Identifier::class);
         $collectionRepository = $entityManager
             ->getRepository(Collection::class);
-        $creatorRepository = $entityManager
+        $creatorRepository    = $entityManager
             ->getRepository(Creator::class);
-        $artistRepository = $entityManager
+        $artistRepository     = $entityManager
             ->getRepository(Artist::class);
-        $sourceRepository = $entityManager
+        $sourceRepository     = $entityManager
             ->getRepository(Source::class);
 
         $params = [
@@ -83,7 +112,7 @@ class IndexDate implements
 
         $data = $response->json();
 
-        foreach ((array)$data['items'] as $detail) {
+        foreach ((array) $data['items'] as $detail) {
             $identifier = $identifierRepository->findOneBy([
                 'archiveIdentifier' => $detail['identifier'],
             ]);
@@ -94,9 +123,7 @@ class IndexDate implements
             }
 
             foreach (array_unique($detail['collection']) as $name) {
-                $collection = $collectionRepository->findOneBy([
-                    'name' => $name,
-                ]);
+                $collection = $collectionRepository->findOneBy(['name' => $name]);
 
                 if (! $collection) {
                     $collection = new Collection();
@@ -104,38 +131,39 @@ class IndexDate implements
                     $entityManager->persist($collection);
                 }
 
-                if (! $identifier->getCollections()->contains($collection)) {
-                    $identifier->addCollection($collection);
-                    $collection->addIdentifier($identifier);
+                if ($identifier->getCollections()->contains($collection)) {
+                    continue;
                 }
+
+                $identifier->addCollection($collection);
+                $collection->addIdentifier($identifier);
             }
 
-            if (isset($detail['creator'])) {
-                // Match creator by exact name in Creator entity
-                $creator = $creatorRepository->findOneBy([
-                    'name' => $detail['creator'],
-                ]);
-
-                // Creator not found;
-                if (! $creator) {
-                    $creator = new Creator();
-                    $creator->setName($detail['creator']);
-                    $entityManager->persist($creator);
-                }
-
-                // Match creator to artist by name
-                $artist = $artistRepository->findOneBy([
-                    'name' => $creator->getName(),
-                ]);
-
-                $creator->setArtist($artist);
-                $identifier->setCreator($creator);
-                $creator->addIdentifier($identifier);
-            } else {
-
+            if (! isset($detail['creator'])) {
                 print_r($detail);
                 die('there is no creator');
             }
+
+            // Match creator by exact name in Creator entity
+            $creator = $creatorRepository->findOneBy([
+                'name' => $detail['creator'],
+            ]);
+
+            // Creator not found;
+            if (! $creator) {
+                $creator = new Creator();
+                $creator->setName($detail['creator']);
+                $entityManager->persist($creator);
+            }
+
+            // Match creator to artist by name
+            $artist = $artistRepository->findOneBy([
+                'name' => $creator->getName(),
+            ]);
+
+            $creator->setArtist($artist);
+            $identifier->setCreator($creator);
+            $creator->addIdentifier($identifier);
 
             $identifier->setArchiveIdentifier($detail['identifier']);
             $source = $sourceRepository
@@ -147,42 +175,55 @@ class IndexDate implements
             if (isset($detail['server'])) {
                 $identifier->setServer($detail['server']);
             }
+
             if (isset($detail['date'])) {
                 $identifier->setPerformanceDate(substr($detail['date'], 0, 10));
             }
+
             if (isset($detail['addeddate'])) {
-                $identifier->setAddedAt(new \DateTime($detail['addeddate']));
+                $identifier->setAddedAt(new DateTime($detail['addeddate']));
             }
+
             if (isset($detail['title'])) {
                 $identifier->setTitle($detail['title']);
             }
+
             if (isset($detail['description'])) {
                 $identifier->setDescription($detail['description']);
             }
+
             if (isset($detail['uploader'])) {
                 $identifier->setUploader($detail['uploader']);
             }
+
             if (isset($detail['venue'])) {
                 $identifier->setVenue($detail['venue']);
             }
+
             if (isset($detail['coverage'])) {
                 $identifier->setCoverage($detail['coverage']);
             }
+
             if (isset($detail['year'])) {
                 $identifier->setYear($detail['year']);
             }
+
             if (isset($detail['notes'])) {
                 $identifier->setNotes($detail['notes']);
             }
+
             if (isset($detail['taper'])) {
                 $identifier->setTaper($detail['taper']);
             }
+
             if (isset($detail['lineage'])) {
                 $identifier->setLineage($detail['lineage']);
             }
+
             if (isset($detail['source'])) {
                 $identifier->setArchiveSource($detail['source']);
             }
+
             if (isset($detail['md5s'])) {
                 $identifier->setMd5s($detail['md5s']);
             }
@@ -195,10 +236,10 @@ class IndexDate implements
         }
     }
 
-    private function saveFiles(EntityManager $entityManager, Identifier $identifier)
+    private function saveFiles(EntityManager $entityManager, Identifier $identifier): void
     {
         $fileRepository = $entityManager->getRepository(File::class);
-        $url = 'https://archive.org/compress/' . $identifier->getArchiveIdentifier() . '/formats=TEXT,METADATA';
+        $url            = 'https://archive.org/compress/' . $identifier->getArchiveIdentifier() . '/formats=TEXT,METADATA';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -215,43 +256,51 @@ class IndexDate implements
         $newUrl = str_replace('.zip&formats=TEXT,METADATA', '', $newUrl);
 
         $tempDir = sys_get_temp_dir() . '/files-' . uniqid();
-        `rm -rf $tempDir`;
+        shell_exec('rm -rf ' . $tempDir);
         @rmdir($tempDir);
 
-        `mkdir $tempDir && cd $tempDir && wget -nH -A txt,ffp,md5,st5,cfv -r --cut-dirs=5 $newUrl`;
+        shell_exec('mkdir '
+            . $tempDir
+            . ' && cd '
+            . $tempDir
+            . ' && wget -nH -A txt,ffp,md5,st5,cfv -r --cut-dirs=5 '
+            . $newUrl);
 
-        $dir = new \DirectoryIterator($tempDir);
+        $dir = new DirectoryIterator($tempDir);
         foreach ($dir as $fileinfo) {
-            if (! $fileinfo->isDot()) {
-                $file = $fileRepository->findOneBy([
-                    'identifier' => $identifier,
-                    'name' => $fileinfo->getFilename(),
-                ]);
+            if ($fileinfo->isDot()) {
+                continue;
+            }
 
-                if (! $file) {
-                    $file = new File();
-                    $file->setIdentifier($identifier);
+            $file = $fileRepository->findOneBy([
+                'identifier' => $identifier,
+                'name' => $fileinfo->getFilename(),
+            ]);
 
-                    $entityManager->persist($file);
-                }
+            if (! $file) {
+                $file = new File();
+                $file->setIdentifier($identifier);
 
-                $file->setName($fileinfo->getFilename());
-                $body = file_get_contents($tempDir . '/' . $fileinfo->getFilename());
-                if ($body) {
-                    $file->setBody($body);
-                }
+                $entityManager->persist($file);
+            }
 
-                try {
-                    $entityManager->flush();
-                } catch (\Exception $e) {
-                    `rm -rf $tempDir`;
-                    @rmdir($tempDir);
-                    throw $e;
-                }
+            $file->setName($fileinfo->getFilename());
+            $body = file_get_contents($tempDir . '/' . $fileinfo->getFilename());
+            if ($body) {
+                $file->setBody($body);
+            }
+
+            try {
+                $entityManager->flush();
+            } catch (Throwable $e) {
+                shell_exec('rm -rf ' . $tempDir);
+                @rmdir($tempDir);
+
+                throw $e;
             }
         }
 
-        `rm -rf $tempDir`;
+        shell_exec('rm -rf ' . $tempDir);
         @rmdir($tempDir);
     }
 }

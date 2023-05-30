@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Query\User;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -11,17 +13,22 @@ use GraphQL\Type\Definition\Type;
 
 class UserQuery implements GraphQLQuery
 {
-    public static function getDefinition(Driver $driver, array $variables = [], ?string $operationName = null): array
+    /**
+     * @param array<string, mixed> $variables
+     *
+     * @return array<string, mixed>
+     */
+    public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array
     {
         return [
             'type' => $driver->type(User::class),
             'args' => [
                 'id' => Type::nonNull(Type::int()),
             ],
-            'resolve' => function ($obj, $args, $context, ResolveInfo $info) use ($driver) {
+            'resolve' => static function ($obj, $args, $context, ResolveInfo $info) use ($driver) {
                 return $driver->get(EntityManager::class)->getRepository(User::class)->find($args['id']);
             },
-            'description' => <<<EOF
+            'description' => <<<'EOF'
 Fetch a single user.
 EOF,
         ];

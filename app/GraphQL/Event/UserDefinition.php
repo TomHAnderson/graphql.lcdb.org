@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Event;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -13,7 +15,7 @@ use League\Event\EventDispatcher;
 
 final class UserDefinition implements Event
 {
-    public static function subscribe(Driver $driver)
+    public static function subscribe(Driver $driver): void
     {
         /**
          * Add a userPerformanceCount field to each user
@@ -22,28 +24,26 @@ final class UserDefinition implements Event
             User::class . '.definition',
             static function (EntityDefinition $event) use ($driver): void {
                 $definition = $event->getDefinition();
-                $fields = $definition['fields']();
+                $fields     = $definition['fields']();
 
                 $fields['userPerformanceCount'] = [
                     'type' => Type::int(),
                     'description' => 'The count of user performances for a user',
-                    'resolve' => static function ($objectValue, array $args, $context, ResolveInfo $info) use ($driver) : mixed {
+                    'resolve' => static function ($objectValue, array $args, $context, ResolveInfo $info) use ($driver): mixed {
                         $queryBuilder = $driver->get(EntityManager::class)->createQueryBuilder();
 
                         $queryBuilder->select('COUNT(userPerformance)')
                             ->from(UserPerformance::class, 'userPerformance')
                             ->innerJoin('userPerformance.user', 'user')
                             ->andWhere($queryBuilder->expr()->eq('user.id', ':id'))
-                            ->setParameter('id', $objectValue->getId())
-                        ;
+                            ->setParameter('id', $objectValue->getId());
 
                         return $queryBuilder->getQuery()->getSingleScalarResult();
                     },
                 ];
 
                 $definition['fields'] = $fields;
-            }
+            },
         );
-
     }
 }

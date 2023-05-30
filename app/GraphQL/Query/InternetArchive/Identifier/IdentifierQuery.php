@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Query\InternetArchive\Identifier;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -11,20 +13,25 @@ use GraphQL\Type\Definition\Type;
 
 class IdentifierQuery implements GraphQLQuery
 {
-    public static function getDefinition(Driver $driver, array $variables = [], ?string $operationName = null): array
+    /**
+     * @param array<string, mixed> $variables
+     *
+     * @return array<string, mixed>
+     */
+    public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array
     {
         return [
             'type' => $driver->type(Identifier::class),
             'args' => [
                 'id' => Type::nonNull(Type::string()),
             ],
-            'resolve' => function ($obj, $args, $context, ResolveInfo $info) use ($driver) {
+            'resolve' => static function ($obj, $args, $context, ResolveInfo $info) use ($driver) {
                 return $driver->get(EntityManager::class)->getRepository(Identifier::class)
                     ->findOneBy([
-                        'archiveIdentifier' => $args['id']
+                        'archiveIdentifier' => $args['id'],
                     ]);
             },
-            'description' => <<<EOF
+            'description' => <<<'EOF'
 Fetch a single identifier.
 EOF,
         ];

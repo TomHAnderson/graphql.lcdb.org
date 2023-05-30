@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Query\Artist;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -10,26 +12,30 @@ use League\Event\EventDispatcher;
 
 class ArtistsUnprefixSourceQuery implements GraphQLQuery
 {
-    public static function getDefinition(Driver $driver, array $variables = [], ?string $operationName = null): array
+    /**
+     * @param array<string, mixed> $variables
+     *
+     * @return array<string, mixed>
+     */
+    public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array
     {
         if ($operationName === 'ArtistsUnprefixSourceOther') {
-            $driver->get(EventDispatcher::class)->subscribeTo('aritsts.unprefix.source',
-                function (FilterQueryBuilder $event) use ($variables) {
+            $driver->get(EventDispatcher::class)->subscribeTo(
+                'aritsts.unprefix.source',
+                static function (FilterQueryBuilder $event): void {
                     $queryBuilder = $event->getQueryBuilder();
                     $queryBuilder
                         ->andWhere(
                             $queryBuilder->expr()->orX(
                                 $queryBuilder->expr()->lt('ASCII(entity.nameUnprefix)', ':min'),
-                                $queryBuilder->expr()->gt('ASCII(entity.nameUnprefix)', ':max')
-
-                            )
+                                $queryBuilder->expr()->gt('ASCII(entity.nameUnprefix)', ':max'),
+                            ),
                         )
                         ->setParameter('min', 65)
                         ->setParameter('max', 122);
-                    ;
 
-#                    print_r($queryBuilder->getQuery()->getSQL());die();
-                }
+                // print_r($queryBuilder->getQuery()->getSQL());die();
+                },
             );
         }
 
@@ -41,9 +47,9 @@ class ArtistsUnprefixSourceQuery implements GraphQLQuery
             ],
             'resolve' => $driver->resolve(
                 ArtistUnprefixSource::class,
-                'aritsts.unprefix.source'
+                'aritsts.unprefix.source',
             ),
-            'description' => <<<EOF
+            'description' => <<<'EOF'
 Fetch a collection of artists that have sources
 using a view for unprefixing the artist name.
 This endpoint does not have relationships.  Use `artists` for related data.

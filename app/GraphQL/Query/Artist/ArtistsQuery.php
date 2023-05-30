@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\GraphQL\Query\Artist;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
@@ -8,7 +10,12 @@ use App\ORM\Entity\ArtistUnprefix;
 
 class ArtistsQuery implements GraphQLQuery
 {
-    public static function getDefinition(Driver $driver, array $variables = [], ?string $operationName = null): array
+    /**
+     * @param array<string, mixed> $variables
+     *
+     * @return array<string, mixed>
+     */
+    public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array
     {
         return [
             'type' => $driver->connection($driver->type(ArtistUnprefix::class)),
@@ -17,7 +24,7 @@ class ArtistsQuery implements GraphQLQuery
                 'pagination' => $driver->pagination(),
             ],
             'resolve' => $driver->resolve(ArtistUnprefix::class),
-            'description' => <<<EOF
+            'description' => <<<'EOF'
 Fetch a collection of artists.
 EOF,
         ];

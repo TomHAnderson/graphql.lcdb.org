@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\InternetArchive;
 
 use App\Jobs\InternetArchive\IndexDate;
@@ -10,24 +12,18 @@ class IndexDateNow extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
-    protected $signature = 'internet-archive:index:now {date}';
+    protected string $signature = 'internet-archive:index:now {date}';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
-    protected $description = 'Command description';
+    protected string $description = 'Command description';
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(EntityManager $entityManager)
+    public function handle(EntityManager $entityManager): int
     {
         $job = new IndexDate($this->argument('date'));
 
