@@ -4,7 +4,6 @@ namespace App\GraphQL\Query\UserPerformance;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
 use App\GraphQL\Query\GraphQLQuery;
-use App\ORM\Entity\Source;
 use App\ORM\Entity\UserPerformance;
 use Doctrine\ORM\EntityManager;
 use GraphQL\Type\Definition\ResolveInfo;

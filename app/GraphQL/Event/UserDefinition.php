@@ -11,7 +11,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use League\Event\EventDispatcher;
 
-final class UserDefinition implements EventInterface
+final class UserDefinition implements Event
 {
     public static function subscribe(Driver $driver)
     {

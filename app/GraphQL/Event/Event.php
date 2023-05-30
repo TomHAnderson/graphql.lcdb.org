@@ -4,7 +4,7 @@ namespace App\GraphQL\Event;
 
 use ApiSkeletons\Doctrine\GraphQL\Driver;
 
-interface EventInterface
+interface Event
 {
     public static function subscribe(Driver $driver);
 }
