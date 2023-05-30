@@ -13,13 +13,17 @@ class EnqueueDatesSince extends Command
 {
     /**
      * The name and signature of the console command.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $signature = 'internet-archive:enqueue:since {date}';
+    protected $signature = 'internet-archive:enqueue:since {date}';
 
     /**
      * The console command description.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $description = 'Enqueue all dates since a given date to be indexed.';
+    protected $description = 'Enqueue all dates since a given date to be indexed.';
 
     /**
      * Execute the console command.

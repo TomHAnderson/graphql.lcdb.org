@@ -12,13 +12,17 @@ class IndexDateNow extends Command
 {
     /**
      * The name and signature of the console command.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $signature = 'internet-archive:index:now {date}';
+    protected $signature = 'internet-archive:index:now {date}';
 
     /**
      * The console command description.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $description = 'Command description';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.

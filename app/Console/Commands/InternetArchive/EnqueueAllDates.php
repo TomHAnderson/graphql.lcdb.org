@@ -13,13 +13,17 @@ class EnqueueAllDates extends Command
 {
     /**
      * The name and signature of the console command.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $signature = 'internet-archive:enqueue:all';
+    protected $signature = 'internet-archive:enqueue:all';
 
     /**
      * The console command description.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $description = 'Enqueue all dates to be indexed.';
+    protected $description = 'Enqueue all dates to be indexed.';
 
     /**
      * Execute the console command.
