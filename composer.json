@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-curl": "*",
         "api-skeletons/doctrine-orm-graphql": "^12.2",
         "api-skeletons/laravel-doctrine-apikey": "^2.0",
         "api-skeletons/laravel-doctrine-data-fixtures": "^1.0",

@@ -28,6 +28,7 @@ final class Schema
 
         $fields = [
             // Artists
+            'artistsRoot'                => Query\Artist\ArtistsRootQuery::getDefinition($driver, $variables, $operationName),
             'artists'                => Query\Artist\ArtistsQuery::getDefinition($driver, $variables, $operationName),
             'artist'                 => Query\Artist\AritstQuery::getDefinition($driver, $variables, $operationName),
             'artistsUnprefix'        => Query\Artist\ArtistsUnprefixQuery::getDefinition($driver, $variables, $operationName),
