@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\GraphQL;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
-use ApiSkeletons\Doctrine\ORM\GraphQL\Type\TypeContainer;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema as GraphQLSchema;
 

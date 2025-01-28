@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Config;
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
+use App\GraphQL\Schema;
 use Doctrine\ORM\EntityManager;
 use GraphQL\Error\Error;
 use GraphQL\Error\FormattedError;
@@ -13,11 +14,12 @@ use GraphQL\GraphQL;
 use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\QueryComplexity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 use Throwable;
 
 use function array_map;
+use function array_merge;
 use function config;
+use function mb_convert_encoding;
 
 class GraphQLController extends Controller
 {
@@ -26,15 +28,6 @@ class GraphQLController extends Controller
     {
         $variables     = $request->get('variables') ?? [];
         $operationName = $request->get('operationName');
-
-        if (Redis::exists('GraphQL.metadata')) {
-            $metadata = Redis::get('GraphQL.metadata');
-            $metadata = unserialize($metadata);
-        } else {
-            $metadata = [];
-        }
-
-        $metadata = [];
 
         // Build Driver
         $driver = new Driver($entityManager, new Config([
@@ -45,11 +38,7 @@ class GraphQLController extends Controller
             'groupSuffix' => '',
             'sortFields' => true,
             'entityPrefix' => 'App\\Doctrine\\ORM\\Entity\\',
-        ]), $metadata);
-
-        if (! $metadata) {
-            Redis::set('GraphQL.metadata', serialize($driver->get('metadata')->getArrayCopy()));
-        }
+        ]));
 
         // Limit query complexity
         DocumentValidator::addRule(new QueryComplexity(350));
@@ -62,7 +51,7 @@ class GraphQLController extends Controller
 
             // Run GraphQL
             $result = GraphQL::executeQuery(
-                schema: \App\GraphQL\Schema::build($driver, $variables, $operationName),
+                schema: Schema::build($driver, $variables, $operationName),
                 source: $request->get('query'),
                 variableValues: $variables,
                 operationName: $operationName,

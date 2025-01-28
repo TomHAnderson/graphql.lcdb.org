@@ -18,7 +18,7 @@ class FileDownloadController extends BaseController
     {
     }
 
-    public function __invoke(int $id, Request $request)
+    public function __invoke(int $id, Request $request): void
     {
         $file = $this->entityManager->getRepository(File::class)
             ->find($id);

@@ -6,9 +6,9 @@ namespace App\GraphQL\Event;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
 use ApiSkeletons\Doctrine\ORM\GraphQL\Event\EntityDefinition;
-use App\GraphQL\Type\TopArtist;
 use App\Doctrine\ORM\Entity\User;
 use App\Doctrine\ORM\Entity\UserPerformance;
+use App\GraphQL\Type\TopArtist;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use GraphQL\Type\Definition\ResolveInfo;

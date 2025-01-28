@@ -6,8 +6,8 @@ namespace App\GraphQL\Query\ArtistGroup;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
 use ApiSkeletons\Doctrine\ORM\GraphQL\Event\QueryBuilder as FilterQueryBuilder;
-use App\GraphQL\Query\GraphQLQuery;
 use App\Doctrine\ORM\Entity\ArtistGroup;
+use App\GraphQL\Query\GraphQLQuery;
 use League\Event\EventDispatcher;
 
 class ArtistGroupsQuery implements GraphQLQuery

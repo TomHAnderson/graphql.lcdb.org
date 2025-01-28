@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\GraphQL\Query\UserPerformance;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
-use App\GraphQL\Query\GraphQLQuery;
 use App\Doctrine\ORM\Entity\UserPerformance;
+use App\GraphQL\Query\GraphQLQuery;
 use Doctrine\ORM\EntityManager;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;

@@ -6,9 +6,9 @@ namespace App\GraphQL\Event\InternetArchive;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
 use ApiSkeletons\Doctrine\ORM\GraphQL\Event\EntityDefinition;
-use App\GraphQL\Event\Event;
 use App\Doctrine\ORM\Entity\InternetArchive\Creator;
 use App\Doctrine\ORM\Entity\InternetArchive\Identifier;
+use App\GraphQL\Event\Event;
 use Doctrine\ORM\EntityManager;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;

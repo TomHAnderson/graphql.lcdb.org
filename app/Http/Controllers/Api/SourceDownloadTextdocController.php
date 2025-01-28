@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 use function abort;
+use function app_path;
 use function header;
 use function preg_replace;
 use function str_replace;
@@ -49,7 +50,7 @@ class SourceDownloadTextdocController extends BaseController
 
     private function safeHtmlString(string $title, string $ext = 'html'): string
     {
-        require_once __DIR__ . '/../../../Functions/unicode_utf8.php';
+        require_once app_path('Functions/unicode_utf8.php');
 
         // Based on http://snipplr.com/view/9024/php-generate-url-from-text/
         $title = preg_replace('/[^A-Za-z0-9-]/', ' ', $title);

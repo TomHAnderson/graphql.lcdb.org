@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Type;
 
-use ApiSkeletons\Doctrine\ORM\GraphQL\Container;
 use ApiSkeletons\Doctrine\ORM\GraphQL\Buildable;
+use ApiSkeletons\Doctrine\ORM\GraphQL\Container;
 use App\Doctrine\ORM\Entity\Artist;
 use GraphQL\Type\Definition\ObjectType;
 
 class ArtistUnprefix extends ObjectType implements Buildable
 {
-    /** @param mixed[] $params
-     */
+    /** @param mixed[] $params */
     public function __construct(Container $typeManager, string $typeName, mixed $params)
     {
         $driver = $params[0];
