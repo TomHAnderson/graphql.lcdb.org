@@ -6,8 +6,8 @@ namespace App\GraphQL\Query\Artist;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
 use ApiSkeletons\Doctrine\ORM\GraphQL\Event\QueryBuilder as FilterQueryBuilder;
-use App\GraphQL\Query\GraphQLQuery;
 use App\Doctrine\ORM\Entity\ArtistUnprefixSource;
+use App\GraphQL\Query\GraphQLQuery;
 use League\Event\EventDispatcher;
 
 class ArtistsUnprefixSourceQuery implements GraphQLQuery

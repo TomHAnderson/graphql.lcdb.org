@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\GraphQL\Query\InternetArchive\Identifier;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
-use App\GraphQL\Query\GraphQLQuery;
 use App\Doctrine\ORM\Entity\InternetArchive\Creator;
+use App\GraphQL\Query\GraphQLQuery;
 
 class IdentifiersQuery implements GraphQLQuery
 {

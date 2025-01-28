@@ -6,8 +6,8 @@ namespace App\GraphQL\Query\Source;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
 use ApiSkeletons\Doctrine\ORM\GraphQL\Event\QueryBuilder as FilterQueryBuilder;
-use App\GraphQL\Query\GraphQLQuery;
 use App\Doctrine\ORM\Entity\Source;
+use App\GraphQL\Query\GraphQLQuery;
 use League\Event\EventDispatcher;
 
 class SourcesQuery implements GraphQLQuery

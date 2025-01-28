@@ -6,8 +6,8 @@ namespace App\GraphQL\Query\UserPerformance;
 
 use ApiSkeletons\Doctrine\ORM\GraphQL\Driver;
 use ApiSkeletons\Doctrine\ORM\GraphQL\Event\QueryBuilder as FilterQueryBuilder;
-use App\GraphQL\Query\GraphQLQuery;
 use App\Doctrine\ORM\Entity\UserPerformance;
+use App\GraphQL\Query\GraphQLQuery;
 use GraphQL\Type\Definition\Type;
 use League\Event\EventDispatcher;
 

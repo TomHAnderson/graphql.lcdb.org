@@ -18,7 +18,7 @@ class ChecksumDownloadController extends BaseController
     {
     }
 
-    public function __invoke(int $id, Request $request): string
+    public function __invoke(int $id, Request $request): void
     {
         $checksum = $this->entityManager->getRepository(Checksum::class)
             ->find($id);
