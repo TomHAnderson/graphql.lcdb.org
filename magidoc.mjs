@@ -18,7 +18,7 @@ export default {
 LCDB GraphQL Database
 =====================
 
-This is the graph database for \`https://lcdb.org\`.
+This is the graph database for [lcdb.org](https://lcdb.org).
 
 You are free to use this database for your own purposes.
 
