@@ -54,7 +54,7 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'latin1'),
-            'collation' => env('DB_COLLATION', 'latin1_unicode_ci'),
+            'collation' => env('DB_COLLATION', 'latin1_swedish_ci'),
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
