@@ -27,6 +27,8 @@ class ArtistUnprefix
      */
     private $id;
 
+    private $nameNormalized;
+
 
     /**
      * Set name.
@@ -108,5 +110,17 @@ class ArtistUnprefix
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getNameNormalized(): ?string
+    {
+        return $this->nameNormalized;
+    }
+
+    public function setNameNormalized(?string $nameNormalized): self
+    {
+        $this->nameNormalized = $nameNormalized;
+
+        return $this;
     }
 }
