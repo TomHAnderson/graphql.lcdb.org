@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="App\Doctrine\ORM\Entity\ArtistUnprefix">
-    <id name="id" type="integer">
+  <entity name="App\Doctrine\ORM\Entity\ArtistUnprefix" table="artists_unprefix">
+    <id name="id" type="integer" column="artist_key">
       <generator strategy="AUTO"/>
     </id>
     <field name="name" type="string" nullable="false"/>
-    <field name="nameUnprefix" type="string" nullable="true"/>
+    <field name="nameUnprefix" type="string" nullable="true" column="name_unprefix"/>
+    <field name="nameNormalized" type="string" nullable="true" column="name_normalized"/>
     <field name="top100" type="boolean" nullable="true"/>
   </entity>
 </doctrine-mapping>

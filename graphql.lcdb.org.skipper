@@ -269,10 +269,26 @@
         </orm-attributes>
       </entity>
       <entity name="\App\Doctrine\ORM\Entity\ArtistUnprefix" local-name="ArtistUnprefix" namespace="\App\Doctrine\ORM\Entity" uuid="9fe1d803-1ed1-4ff5-8344-0eebec1121f3">
-        <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="c3f3e6a1-bc93-44b7-ac4d-ccdc471412eb"/>
+        <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="c3f3e6a1-bc93-44b7-ac4d-ccdc471412eb">
+          <orm-attributes>
+            <attribute name="column">artist_key</attribute>
+          </orm-attributes>
+        </field>
         <field name="name" type="string" required="true" uuid="4ced40ca-9009-4444-9600-580249c0ea85"/>
-        <field name="nameUnprefix" type="string" uuid="5c5fe26d-4ad5-4ba7-ab1b-7809b93a9ffe"/>
+        <field name="nameUnprefix" type="string" uuid="5c5fe26d-4ad5-4ba7-ab1b-7809b93a9ffe">
+          <orm-attributes>
+            <attribute name="column">name_unprefix</attribute>
+          </orm-attributes>
+        </field>
+        <field name="nameNormalized" type="string" uuid="496bb2ae-a391-42b4-aa41-3c784522673d">
+          <orm-attributes>
+            <attribute name="column">name_normalized</attribute>
+          </orm-attributes>
+        </field>
         <field name="top100" type="boolean" uuid="f69b0e1a-1940-4e52-872d-c9fa889ef9b1"/>
+        <orm-attributes>
+          <attribute name="table">artists_unprefix</attribute>
+        </orm-attributes>
       </entity>
       <entity name="\App\Doctrine\ORM\Entity\ArtistUnprefixSource" local-name="ArtistUnprefixSource" namespace="\App\Doctrine\ORM\Entity" uuid="3ae54e2c-7903-4273-be52-d419be3bf1a9">
         <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="90aaf42d-177c-4c4e-b58c-ab543652be23"/>
