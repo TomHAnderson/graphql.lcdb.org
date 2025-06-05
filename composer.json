@@ -11,6 +11,7 @@
         "api-skeletons/doctrine-orm-graphql": "^12.3",
         "api-skeletons/laravel-doctrine-apikey": "^2.0",
         "api-skeletons/laravel-doctrine-data-fixtures": "^1.0",
+        "beberlei/doctrineextensions": "^1.5",
         "laravel-doctrine/orm": "^3.0",
         "laravel/framework": "^11.9",
         "mll-lab/laravel-graphiql": "^4.0"
