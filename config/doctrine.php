@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\DefaultNamingStrategy;
+use DoctrineExtensions\Query\Mysql\Ascii;
 
 return [
 
@@ -139,7 +140,9 @@ return [
     | DQL custom string functions
     |--------------------------------------------------------------------------
     */
-    'custom_string_functions'    => [],
+    'custom_string_functions'    => [
+        'ASCII' => Ascii::class,
+    ],
     /*
     |--------------------------------------------------------------------------
     | Register custom hydrators
@@ -184,7 +187,7 @@ return [
     | laravel-doctrine/extensions in your composer.json
     |
     */
-    'gedmo'                      => ['all_mappings' => false],
+    'gedmo' => ['all_mappings' => false],
     /*
      |--------------------------------------------------------------------------
      | Validation
