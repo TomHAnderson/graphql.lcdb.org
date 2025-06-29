@@ -46,11 +46,7 @@ final class Schema
             'sources'          => Query\Source\SourcesQuery::getDefinition($driver, $variables, $operationName),
 
             // Internet Archive
-            'creator'              => Query\InternetArchive\Creator\CreatorQuery::getDefinition($driver, $variables, $operationName),
-            'creators'             => Query\InternetArchive\Creator\CreatorsQuery::getDefinition($driver, $variables, $operationName),
-            'creatorsUnprefix'     => Query\InternetArchive\Creator\CreatorsUnprefixQuery::getDefinition($driver, $variables, $operationName),
-            'identifier'           => Query\InternetArchive\Identifier\IdentifierQuery::getDefinition($driver, $variables, $operationName),
-            'identifiers'          => Query\InternetArchive\Identifier\IdentifiersQuery::getDefinition($driver, $variables, $operationName),
+            'iaPerformance' => Query\InternetArchive\PerformanceQuery::getDefinition($driver, $variables, $operationName),
 
             // Users
             'user'                 => Query\User\UserQuery::getDefinition($driver, $variables, $operationName),
