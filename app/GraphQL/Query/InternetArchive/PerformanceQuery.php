@@ -18,7 +18,6 @@ use function exec;
 use function explode;
 use function implode;
 use function json_decode;
-use function print_r;
 use function substr;
 
 class PerformanceQuery implements GraphQLQuery
@@ -91,7 +90,7 @@ class PerformanceQuery implements GraphQLQuery
                 return $queryBuilder->getQuery()->getResult();
             },
             'description' => <<<'EOF'
-Fetch a single artist group.
+Fetch performances for an identifier.
 EOF,
         ];
     }
