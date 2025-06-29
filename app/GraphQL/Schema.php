@@ -46,6 +46,7 @@ final class Schema
             'sources'          => Query\Source\SourcesQuery::getDefinition($driver, $variables, $operationName),
 
             // Internet Archive
+            'iaPerformance' => Query\InternetArchive\PerformanceQuery::getDefinition($driver, $variables, $operationName),
 
             // Users
             'user'                 => Query\User\UserQuery::getDefinition($driver, $variables, $operationName),
