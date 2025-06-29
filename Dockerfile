@@ -13,20 +13,22 @@ LABEL author="apiskeletons.com" \
 # Command line utilities
 RUN apt-get update
 RUN apt-get install --yes apt-utils
-RUN apt-get install --yes git
-RUN apt-get install --yes wget
 RUN apt-get install --yes curl
-RUN apt-get install --yes vim
-RUN apt-get install --yes zip
-RUN apt-get install --yes unzip
-RUN apt-get install --yes lftp
-RUN apt-get install --yes zlib1g-dev
-RUN apt-get install --yes libpng-dev
-RUN apt-get install --yes libzip-dev
-RUN apt-get install --yes libxml2-dev
 RUN apt-get install --yes default-mysql-client
+RUN apt-get install --yes jq
+RUN apt-get install --yes lftp
+RUN apt-get install --yes libpng-dev
+RUN apt-get install --yes libxml2-dev
+RUN apt-get install --yes libzip-dev
+RUN apt-get install --yes pip
 RUN apt-get install --yes procps
+RUN apt-get install --yes python3-full
 RUN apt-get install --yes redis
+RUN apt-get install --yes unzip
+RUN apt-get install --yes vim
+RUN apt-get install --yes wget
+RUN apt-get install --yes zip
+RUN apt-get install --yes zlib1g-dev
 
 # Environment
 ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
@@ -44,7 +46,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | b
     && nvm use default \
     && npm install -g pnpm \
     && which pnpm \
-    && SHELL=/bin/bash PNPM_HOME=/usr/bin pnpm setup \ 
+    && SHELL=/bin/bash PNPM_HOME=/usr/bin pnpm setup \
     && SHELL=/bin/bash PNPM_HOME=/usr/bin pnpm add --global @magidoc/cli@6.0.1
 
 # PHP
@@ -83,6 +85,12 @@ RUN touch /var/www/storage/logs/laravel.log && \
   touch /var/www/storage/logs/laravel.log
 RUN chgrp -R www-data storage bootstrap/cache
 RUN chmod -R ug+rwx storage bootstrap/cache
+
+# Internet Archive CLI
+RUN curl -LOs https://archive.org/download/ia-pex/ia
+RUN mv ia /usr/local/bin/ia
+RUN chmod +x /usr/local/bin/ia
+RUN pip install --break-system-packages internetarchive
 
 # Expose port
 EXPOSE 8080
