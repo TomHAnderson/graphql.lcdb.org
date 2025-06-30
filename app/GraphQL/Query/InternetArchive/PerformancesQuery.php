@@ -20,7 +20,7 @@ use function implode;
 use function json_decode;
 use function substr;
 
-class PerformanceQuery implements GraphQLQuery
+class PerformancesQuery implements GraphQLQuery
 {
     /** @inheritDoc */
     public static function getDefinition(Driver $driver, array $variables = [], string|null $operationName = null): array

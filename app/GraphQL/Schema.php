@@ -47,7 +47,7 @@ final class Schema
 
             // Internet Archive
             'iaArtist'      => Query\InternetArchive\ArtistQuery::getDefinition($driver, $variables, $operationName),
-            'iaPerformance' => Query\InternetArchive\PerformanceQuery::getDefinition($driver, $variables, $operationName),
+            'iaPerformances' => Query\InternetArchive\PerformancesQuery::getDefinition($driver, $variables, $operationName),
 
             // Users
             'user'                 => Query\User\UserQuery::getDefinition($driver, $variables, $operationName),
