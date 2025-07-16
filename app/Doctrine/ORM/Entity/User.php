@@ -132,6 +132,8 @@ class User
      */
     private $id;
 
+    private $bearerTokens = null;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */

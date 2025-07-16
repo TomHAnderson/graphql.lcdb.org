@@ -25,7 +25,7 @@ final class Schema
         Event\UserListDefinition::subscribe($driver);
         Event\InternetArchive\CreatorDefinition::subscribe($driver);
 
-        $fields = [
+        $queryFields = [
             // Artists
             'artistsRoot'                => Query\Artist\ArtistsRootQuery::getDefinition($driver, $variables, $operationName),
             'artists'                => Query\Artist\ArtistsQuery::getDefinition($driver, $variables, $operationName),
@@ -65,12 +65,20 @@ final class Schema
             'userPerformancesByUsername' => Query\UserPerformance\UserPerformancesByUsernameQuery::getDefinition($driver, $variables, $operationName),
         ];
 
-        ksort($fields);
+        $mutationFields = [
+            'login' => Mutation\User\LoginMutation::getDefinition($driver, $variables, $operationName),
+        ];
+
+        ksort($queryFields);
 
         return new GraphQLSchema([
+            'mutation' => new ObjectType([
+                'name' => 'mutation',
+                'fields' => $mutationFields,
+            ]),
             'query' => new ObjectType([
                 'name' => 'query',
-                'fields' => $fields,
+                'fields' => $queryFields,
             ]),
         ]);
     }
