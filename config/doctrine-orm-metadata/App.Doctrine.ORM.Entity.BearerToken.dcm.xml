@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Doctrine\ORM\Entity\BearerToken" table="bearer_tokens" repository-class="App\Doctrine\ORM\Repository\BearerTokenRepository">
+    <id name="user" type="integer" association-key="true" column="ref_user">
+      <options>
+        <option name="unsigned">true</option>
+      </options>
+    </id>
+    <id name="token" type="string"/>
+    <field name="createdAt" type="datetime" nullable="false" column="created_at"/>
+    <field name="expiresAt" type="datetime" nullable="true" column="expires_at"/>
+    <many-to-one field="user" target-entity="App\Doctrine\ORM\Entity\User" inversed-by="bearerTokens">
+      <join-columns>
+        <join-column name="ref_user" referenced-column-name="user_key" nullable="false"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

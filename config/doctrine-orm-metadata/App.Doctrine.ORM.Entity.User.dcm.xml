@@ -36,6 +36,7 @@
         <join-column name="ref_template" referenced-column-name="template_key" nullable="false"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="bearerTokens" target-entity="App\Doctrine\ORM\Entity\BearerToken" mapped-by="user"/>
     <one-to-many field="artists" target-entity="App\Doctrine\ORM\Entity\Artist" mapped-by="user"/>
     <one-to-many field="artistGroups" target-entity="App\Doctrine\ORM\Entity\ArtistGroup" mapped-by="user"/>
     <one-to-many field="artistToArtistGroups" target-entity="App\Doctrine\ORM\Entity\ArtistToArtistGroup" mapped-by="user"/>

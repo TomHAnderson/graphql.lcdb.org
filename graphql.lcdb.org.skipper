@@ -154,9 +154,34 @@
           <attribute name="table">templates</attribute>
         </orm-attributes>
       </entity>
+      <entity name="\App\Doctrine\ORM\Entity\BearerToken" local-name="BearerToken" namespace="\App\Doctrine\ORM\Entity" uuid="22b7d135-9d53-48c5-971c-6c7b04dd9290">
+        <field name="user_id" type="integer" required="true" primary="true" unsigned="true" uuid="3fbecc6a-9ef3-4962-b848-2e9a6c606492">
+          <orm-attributes>
+            <attribute name="column">ref_user</attribute>
+          </orm-attributes>
+        </field>
+        <field name="token" type="string" required="true" unique="true" primary="true" uuid="2b45495a-573a-429b-bbb6-c1d46235e00f"/>
+        <field name="createdAt" type="datetime" required="true" uuid="ee676ee7-6109-4987-949b-b1654e88e8b2">
+          <orm-attributes>
+            <attribute name="column">created_at</attribute>
+          </orm-attributes>
+        </field>
+        <field name="expiresAt" type="datetime" uuid="a2b914cb-b0c2-4d7c-b4d0-6b03bc7a86a1">
+          <orm-attributes>
+            <attribute name="column">expires_at</attribute>
+          </orm-attributes>
+        </field>
+        <orm-attributes>
+          <attribute name="table">bearer_tokens</attribute>
+          <attribute name="repository-class">App\Doctrine\ORM\Repository\BearerTokenRepository</attribute>
+        </orm-attributes>
+      </entity>
     </region>
     <association from="\App\Doctrine\ORM\Entity\User" to="\App\Doctrine\ORM\Entity\Template" caption="template users" owner-alias="users" inverse-alias="template" many-owner="true" many-inverse="false" parent-required="true" uuid="e7f61705-5ae2-4bda-b1bc-a9d72cede334">
       <association-field from="template_id" to="id" uuid="e55ccc7b-76e8-4c43-ab8e-2fc6858f8920"/>
+    </association>
+    <association from="\App\Doctrine\ORM\Entity\BearerToken" to="\App\Doctrine\ORM\Entity\User" caption="User BearerTokens" owner-alias="bearerTokens" inverse-alias="user" many-owner="true" many-inverse="false" parent-required="true" uuid="e6c09d79-1600-4c4b-9f08-90cfae43b06d">
+      <association-field from="user_id" to="id" uuid="50d5b092-3d42-4c94-baa7-a34930551d94"/>
     </association>
     <region namespace="\App\Doctrine\ORM\Entity" caption="Artist" uuid="be205dd0-a443-425f-83ad-03caf1147bfd">
       <entity name="\App\Doctrine\ORM\Entity\Artist" local-name="Artist" namespace="\App\Doctrine\ORM\Entity" uuid="6ddcef17-f5aa-4855-8e71-36d20afc0731">
@@ -669,13 +694,15 @@
     <association uuid="b2a07378-c017-421e-86ed-68e269766fb7" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="#969696"/>
     <association uuid="b2df600d-7b27-4ea4-8c7f-f46a6b7834eb" caption1-position-x="0" caption1-position-y="0" center-position-x="-55" center-position-y="0" color="#969696"/>
     <association uuid="b3f75f44-f1bf-402d-8602-781e0daa3bc1" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="#969696" split="1"/>
-    <association uuid="bf5889ca-a445-4b71-97c6-3c790114f297" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="#969696"/>
+    <association uuid="bf5889ca-a445-4b71-97c6-3c790114f297" caption1-position-x="-5" caption1-position-y="53" center-position-x="0" center-position-y="0" color="#969696"/>
     <association uuid="dcab53a0-1ef9-4ae8-bee6-cc51e0c54c46" caption1-position-x="2" caption1-position-y="3" center-position-x="0" center-position-y="0" color="#969696"/>
+    <association uuid="e6c09d79-1600-4c4b-9f08-90cfae43b06d" caption1-position-x="0" caption1-position-y="3" center-position-x="0" center-position-y="0" color="#969696"/>
     <association uuid="e7f61705-5ae2-4bda-b1bc-a9d72cede334" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="#969696"/>
     <association uuid="ffd84ee4-95c8-48d6-8643-1c8b9be9137c" caption1-position-x="-3" caption1-position-y="-10" caption2-position-x="0" caption2-position-y="0" center-position-x="0" center-position-y="0" color="#969696" split="1"/>
     <entity uuid="053461fc-1c29-4562-97bb-abcecad4841c" bg-color="#FFFFFF" hdr-color="#FF00FF" position-x="374" position-y="146" size-x="0" size-x2="110" size-y="0" size-y2="59"/>
-    <entity uuid="100fa54c-0cae-436f-bb4d-77c09696f412" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="30" position-y="86" size-x="0" size-x2="112" size-y="0" size-y2="157"/>
+    <entity uuid="100fa54c-0cae-436f-bb4d-77c09696f412" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="28" position-y="180" size-x="0" size-x2="112" size-y="0" size-y2="157"/>
     <entity uuid="1add2d4a-bcb2-4fe6-b4d0-0339dc51957f" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="8" position-y="162" size-x="0" size-x2="125" size-y="0" size-y2="73"/>
+    <entity uuid="22b7d135-9d53-48c5-971c-6c7b04dd9290" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="40" position-y="33" size-x="0" size-x2="105" size-y="0" size-y2="87"/>
     <entity uuid="2c7f10c8-201c-4a63-82fa-53972812613b" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="531" position-y="45" size-x="0" size-x2="150" size-y="0" size-y2="395"/>
     <entity uuid="3ae54e2c-7903-4273-be52-d419be3bf1a9" bg-color="#FFFFFF" hdr-color="#FF00FF" position-x="455" position-y="133" size-x="0" size-x2="110" size-y="0" size-y2="73"/>
     <entity uuid="4057bc91-3552-4ce3-9082-9a8b64635a90" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="31" position-y="100" size-x="0" size-x2="126" size-y="0" size-y2="185"/>
