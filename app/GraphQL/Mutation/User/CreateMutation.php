@@ -62,6 +62,7 @@ class CreateMutation implements GraphQLMutation
                     ->setTemplate($template)
                     ->setValidemail(false)
                     ->setConfirmHash($confirmHash)
+                    ->setPerms('musicLover')
                     ->setState('')
                     ->setCreatedAt(new DateTime())
                     ->setUpdatedAt(new DateTime());
