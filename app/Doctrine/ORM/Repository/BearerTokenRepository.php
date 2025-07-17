@@ -60,9 +60,6 @@ class BearerTokenRepository extends EntityRepository
             $bearerToken->setExpiresAt($expiresAt);
         }
 
-        $this->getEntityManager()->persist($bearerToken);
-        $this->getEntityManager()->flush();
-
         return $bearerToken;
     }
 }

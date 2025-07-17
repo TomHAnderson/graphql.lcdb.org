@@ -39,10 +39,15 @@ class LoginMutation implements GraphQLMutation
                     throw new Error('Invalid password for user: ' . $args['username']);
 
                 // Return a bearer token for the user
-                return $entityManager->getRepository(BearerToken::class)->create($user);
+                $bearerToken = $entityManager->getRepository(BearerToken::class)->create($user);
+
+                $entityManager->persist($bearerToken);
+                $entityManager->flush();
+
+                return $bearerToken;
             },
             'description' => <<<'EOF'
-Fetch contents of files for an identifier.
+Login a user.
 EOF,
         ];
     }
