@@ -9,6 +9,7 @@ use App\Doctrine\ORM\Entity\BearerToken;
 use App\Doctrine\ORM\Entity\Template;
 use App\Doctrine\ORM\Entity\User;
 use App\GraphQL\Mutation\GraphQLMutation;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -60,7 +61,10 @@ class CreateMutation implements GraphQLMutation
                     ->setPassword(password_hash($args['password'], PASSWORD_BCRYPT))
                     ->setTemplate($template)
                     ->setValidemail(false)
-                    ->setConfirmHash($confirmHash);
+                    ->setConfirmHash($confirmHash)
+                    ->setState('')
+                    ->setCreatedAt(new DateTime())
+                    ->setUpdatedAt(new DateTime());
 
                 // Return a bearer token for the user
                 $bearerToken = $entityManager->getRepository(BearerToken::class)->create($user);

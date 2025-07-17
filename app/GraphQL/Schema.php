@@ -67,6 +67,7 @@ final class Schema
 
         $mutationFields = [
             'login' => Mutation\User\LoginMutation::getDefinition($driver, $variables, $operationName),
+            'userCreate' => Mutation\User\CreateMutation::getDefinition($driver, $variables, $operationName),
         ];
 
         ksort($queryFields);

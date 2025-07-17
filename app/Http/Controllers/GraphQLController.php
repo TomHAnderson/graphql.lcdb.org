@@ -71,6 +71,8 @@ class GraphQLController extends Controller
 
             return mb_convert_encoding($result->toArray(), 'UTF-8', 'UTF-8');
         } catch (Throwable $e) {
+            throw $e;
+
             return FormattedError::createFromException($e);
         }
     }
