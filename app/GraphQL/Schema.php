@@ -70,6 +70,7 @@ final class Schema
             'login' => Mutation\User\LoginMutation::getDefinition($driver, $variables, $operationName),
             'userCreate' => Mutation\User\CreateMutation::getDefinition($driver, $variables, $operationName),
             'resetPassword' => Mutation\User\ResetPasswordMutation::getDefinition($driver, $variables, $operationName),
+            'savePassword' => Mutation\User\SavePasswordMutation::getDefinition($driver, $variables, $operationName),
         ];
 
         ksort($queryFields);

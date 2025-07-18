@@ -40,9 +40,8 @@ class ResetPasswordMutation implements GraphQLMutation
                     throw new Error('User not found by email: ' . $args['email']);
                 }
 
-                $confirmHash = bin2hex(random_bytes(8));
+                $confirmHash = bin2hex(random_bytes(32));
 
-                $user = new User();
                 $user
                     ->setConfirmHash($confirmHash)
                     ->setUpdatedAt(new DateTime());
@@ -51,8 +50,8 @@ class ResetPasswordMutation implements GraphQLMutation
 
                 // Send reset password email
                 $guzzle = new Client();
-//      prod          $guzzle->post('https://n8n.apiskeletons.dev/webhook/af025e91-5705-4a0b-bcc2-7af1dbcb726c', [
-                $guzzle->post('https://n8n.apiskeletons.dev/webhook-test/af025e91-5705-4a0b-bcc2-7af1dbcb726c', [
+                $guzzle->post('https://n8n.apiskeletons.dev/webhook/af025e91-5705-4a0b-bcc2-7af1dbcb726c', [ // Production
+//                $guzzle->post('https://n8n.apiskeletons.dev/webhook-test/af025e91-5705-4a0b-bcc2-7af1dbcb726c', [
                     'json' => [
                         'name' => $user->getName(),
                         'email' => $user->getRealemail(),
