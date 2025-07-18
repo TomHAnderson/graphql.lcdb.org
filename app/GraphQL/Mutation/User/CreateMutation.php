@@ -51,7 +51,7 @@ class CreateMutation implements GraphQLMutation
                 }
 
                 $template    = $entityManager->getRepository(Template::class)->findOneBy(['name' => 'original']);
-                $confirmHash = bin2hex(random_bytes(8));
+                $confirmHash = bin2hex(random_bytes(32));
 
                 $user = new User();
                 $user->setName($args['name'])

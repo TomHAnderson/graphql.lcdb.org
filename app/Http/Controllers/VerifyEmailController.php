@@ -44,6 +44,6 @@ class VerifyEmailController extends Controller
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return redirect('https://lcdb.org/user/' . $user->getUsername());
+        return redirect('https://lcdb.org/user/' . $user->getUsername() . '?emailVerified=true');
     }
 }

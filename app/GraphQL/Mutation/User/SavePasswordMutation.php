@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManager;
 use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
-use GuzzleHttp\Client;
 
 use function password_hash;
 
