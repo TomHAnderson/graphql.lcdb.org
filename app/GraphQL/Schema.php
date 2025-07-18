@@ -66,11 +66,14 @@ final class Schema
         ];
 
         $mutationFields = [
+            // Users
             'login' => Mutation\User\LoginMutation::getDefinition($driver, $variables, $operationName),
             'userCreate' => Mutation\User\CreateMutation::getDefinition($driver, $variables, $operationName),
+            'resetPassword' => Mutation\User\ResetPasswordMutation::getDefinition($driver, $variables, $operationName),
         ];
 
         ksort($queryFields);
+        ksort($mutationFields);
 
         return new GraphQLSchema([
             'mutation' => new ObjectType([
